@@ -2,6 +2,7 @@ package com.SEC.SEC_MealTicketApply_Backend.Controller;
 
 import com.SEC.SEC_MealTicketApply_Backend.Domain.Application;
 import com.SEC.SEC_MealTicketApply_Backend.Domain.Ticket;
+import com.SEC.SEC_MealTicketApply_Backend.Domain.Ticket_Page;
 import com.SEC.SEC_MealTicketApply_Backend.Service.IApplicationService;
 import com.SEC.SEC_MealTicketApply_Backend.Service.ITicketService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -18,6 +19,8 @@ import java.util.List;
 public class TicketController {
     @Autowired
     private ITicketService ticketService;
+    @Autowired
+    private IApplicationService applicationService;
 
     // 对所有饭票记录分页返回
     @GetMapping("/page/{current}/{size}")
@@ -70,6 +73,26 @@ public class TicketController {
         QueryWrapper<Ticket> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("appearDate", date).orderByDesc("id");
         return ticketService.page(page, queryWrapper);
+    }
+
+    // 用手机查询饭票，分页返回
+    @GetMapping("/getTicket/{phone}/{current}/{size}")
+    public Ticket_Page getTicket(@PathVariable String phone, @PathVariable int current, @PathVariable int size) {
+        int start = (current - 1) * size;
+        Ticket_Page data = new Ticket_Page();
+        data.setRecords(ticketService.getTicket(phone, start, size));
+        QueryWrapper<Application> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("applicant", phone);
+        queryWrapper.eq("approvalState", "通过");
+        List<Application> list = applicationService.list(queryWrapper);
+        int sum = 0;
+        for(int i=0;i<list.size();i++) {
+            sum += list.get(i).getApplyNum();
+        }
+        data.setTotal(sum);
+        data.setCurrent(current);
+        data.setSize(size);
+        return data;
     }
 
     // 根据id更新一条饭票记录
