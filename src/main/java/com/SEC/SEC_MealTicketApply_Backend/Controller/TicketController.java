@@ -11,6 +11,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -102,6 +104,33 @@ public class TicketController {
             return ticketService.updateById(ticket);
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    // 使用饭票
+    @PutMapping("/useTicket/{id}")
+    public String useTicket(@PathVariable int id) {
+        try {
+            Ticket ticket = ticketService.getById(id);
+            if(!ticket.getState().equals("未使用")) {
+                return "STATE_ERROR";
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date currentDate = sdf.parse(sdf.format(new Date()));
+            Date expiredDate = sdf.parse(ticket.getExpiredDate());
+            if(currentDate.compareTo(expiredDate) > 0) {
+                return "DATE_ERROR";
+            }
+
+            ticket.setState("已使用");
+            ticket.setUseDate(sdf.format(new Date()));
+            if(ticketService.updateById(ticket)) {
+                return "SUCCESS";
+            } else {
+                return "ERROR";
+            }
+        } catch (Exception e) {
+             return "ERROR";
         }
     }
 }
