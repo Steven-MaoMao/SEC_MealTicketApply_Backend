@@ -105,7 +105,6 @@ public class UserController {
     }
 
 //  根据工号查询一个用户，用分页的方式返回
-//  永远只返回一条用户数据，用分页的方式为了美观
     @GetMapping("/pageByWno/{wno}/{current}/{size}")
     public IPage<User> getPageByWno(@PathVariable String wno, @PathVariable int current, @PathVariable int size) {
         IPage<User> page = new Page<User>(current, size);
@@ -124,7 +123,6 @@ public class UserController {
     }
 
 //  根据手机号查询一个用户，用分页的方式返回
-//  永远只返回一条用户数据，用分页的方式为了美观
     @GetMapping("/pageByPhone/{phone}/{current}/{size}")
     public IPage<User> getPageByPhone(@PathVariable String phone, @PathVariable int current, @PathVariable int size) {
         IPage<User> page = new Page<User>(current, size);

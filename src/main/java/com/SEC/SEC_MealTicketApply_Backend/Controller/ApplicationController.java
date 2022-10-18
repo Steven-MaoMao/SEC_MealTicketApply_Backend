@@ -2,15 +2,12 @@ package com.SEC.SEC_MealTicketApply_Backend.Controller;
 
 import com.SEC.SEC_MealTicketApply_Backend.Domain.Application;
 import com.SEC.SEC_MealTicketApply_Backend.Domain.User;
-import com.SEC.SEC_MealTicketApply_Backend.Domain.User_Application;
 import com.SEC.SEC_MealTicketApply_Backend.Domain.User_Application_Page;
 import com.SEC.SEC_MealTicketApply_Backend.Service.IApplicationService;
 import com.SEC.SEC_MealTicketApply_Backend.Service.IUserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import javafx.scene.chart.ScatterChart;
-import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,14 +51,8 @@ public class ApplicationController {
         return applicationService.page(page, queryWrapper);
     }
 
-//  返回某用户的申请记录
+//  对某用户的申请记录分页返回
     @GetMapping("/pageByPhone/{phone}/{current}/{size}")
-//    public IPage<Application> getPageByPhone(@PathVariable String phone, @PathVariable int current, @PathVariable int size) {
-//        QueryWrapper<Application> queryWrapper = new QueryWrapper<>();
-//        queryWrapper.eq("applicant", phone).orderByDesc("id");
-//        IPage<Application> page = new Page<Application>(current, size);
-//        return applicationService.page(page, queryWrapper);
-//    }
     public User_Application_Page getPageByPhone(@PathVariable String phone, @PathVariable int current, @PathVariable int size) {
         int start = (current - 1) * size;
         User_Application_Page data = new User_Application_Page();
@@ -74,14 +65,8 @@ public class ApplicationController {
         return data;
     }
 
-//  分页返回待审批的申请
+//  对待审批的申请分页返回
     @GetMapping("/toApprove/{phone}/{current}/{size}")
-//    public IPage<Application> getToApprove(@PathVariable int current, @PathVariable int size) {
-//        QueryWrapper<Application> queryWrapper = new QueryWrapper<>();
-//        queryWrapper.eq("approvalState", "待审批").orderByDesc("id");
-//        IPage<Application> page = new Page<Application>(current, size);
-//        return applicationService.page(page, queryWrapper);
-//    }
     public User_Application_Page getToApprove(@PathVariable String phone, @PathVariable int current, @PathVariable int size) {
         int start = (current - 1) * size;
         User_Application_Page data = new User_Application_Page();
@@ -109,16 +94,8 @@ public class ApplicationController {
         return data;
     }
 
-//  分页返回某用户的已审批
+//  对某用户的已审批记录分页返回
     @GetMapping("/approved/{phone}/{current}/{size}")
-//    public IPage<Application> getApproved(@PathVariable String phone, @PathVariable int current, @PathVariable int size) {
-//        QueryWrapper<Application> queryWrapper = new QueryWrapper<>();
-//        queryWrapper.ne("approvalState", "待审批");
-//        queryWrapper.eq("approver", phone);
-//        queryWrapper.orderByDesc("id");
-//        IPage<Application> page = new Page<Application>(current, size);
-//        return applicationService.page(page, queryWrapper);
-//    }
     public User_Application_Page getApproved(@PathVariable String phone, @PathVariable int current, @PathVariable int size) {
         int start = (current - 1) * size;
         User_Application_Page data = new User_Application_Page();

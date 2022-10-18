@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.SEC.SEC_MealTicketApply_Backend.JWT.Jwt.parseToken;
 
+
 @RestController
 @RequestMapping("/token")
 @CrossOrigin
